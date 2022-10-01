@@ -1,0 +1,16 @@
+[
+    {
+        "id": 11,
+        "name": "Jayavel11",
+        "email": "jayavel11@gmail.com",
+        "contactnumber": 9792939934,
+        "address": "Rett Street, Kandarakottai"
+    },
+    {
+        "id": 12,
+        "name": "Jayavel12",
+        "email": "jayavel12@gmail.com",
+        "contactnumber": 9892939934,
+        "address": "Rett Street, Kandarakottai"
+    }
+]

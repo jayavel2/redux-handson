@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "name": "Jayavel",
+        "email": "jayavel@gmail.com",
+        "contactnumber": 9792939934,
+        "address": "Rett Street, Kandarakottai"
+    },
+    {
+        "id": 2,
+        "name": "Jayavel1",
+        "email": "jayavel1@gmail.com",
+        "contactnumber": 9892939934,
+        "address": "Rett Street, Kandarakottai"
+    },
+    {
+        "id": 3,
+        "name": "Jayavel3",
+        "email": "jayavel3@gmail.com",
+        "contactnumber": 9792939934,
+        "address": "Rett Street, Kandarakottai"
+    },
+    {
+        "id": 4,
+        "name": "Jayavel4",
+        "email": "jayavel4@gmail.com",
+        "contactnumber": 9722939934,
+        "address": "Rett Street, Kandarakottai"
+    }
+]
