@@ -1,44 +1,23 @@
-import { createReducer, on } from '@ngrx/store';
-import { userListSuccess, userListFailure, showLoader, loadUsers } from '../action/user-list.action';
-import { adapter, userInitialState } from '../state/app.index';
- 
-export const initialState = {
-  userListSuccessRes: [],
-  isUserList: [],
-  userListFailureRes: [],
-  showLoading: false,
-}
+import { Action, createReducer, on } from '@ngrx/store';
+import { userListSuccess, deleteUserSuccess, createUserSuccess, updateUserSuccess } from '../action/user-list.action';
+import { adapter, State, userInitialState } from '../state/app.index';
  
 const _userListReducer = createReducer(
   userInitialState,
-  on(loadUsers, (state, action)=> {
-    return adapter.addMany(action.users, state)
-  }),
   on(userListSuccess, (state, action) => {
-    return adapter.addMany(action.users, state)
+    return adapter.setAll(action.users, state)
   }),
-  // on(userListFailure, (state, action) => {
-  //   return {
-  //     ...state,
-  //     userListFailureRes: {
-  //       ...state.userListFailureRes,
-  //       [`${action.userListFail.id}`]: action.userListFail.userListFail
-  //     },
-  //     isUserList : {
-  //       ...state.isUserList,
-  //       [`${action.userListFail.id}`]: false
-  //     }
-  //   }
-  // }),
-  // on(showLoader, (state, action) => {
-  //   return {
-  //     ...state,
-  //     showLoading : action.status,
-  //     userListFailureRes: []
-  //   }
-  // })
+  on(createUserSuccess, (state, action) => {
+    return adapter.addOne(action.userDetail, state)
+  }),
+  on(updateUserSuccess, (state, action) => {
+    return adapter.updateOne(action.userDetail, state)
+  }),
+  on(deleteUserSuccess, (state, action) => {
+    return adapter.removeOne(action.userId, state);
+  })
 );
 
-export function UserListReducer(state: any, action: any) {
+export function UserListReducer(state: State, action: Action) {
   return _userListReducer(state, action);
 }

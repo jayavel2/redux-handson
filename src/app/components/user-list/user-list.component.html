@@ -1,0 +1,47 @@
+<h1>User List Table</h1>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
+  Add User
+</button>
+<!-- <ng-container *ngIf="showLoading | async">
+  <div>Loading....</div>
+</ng-container> -->
+
+<ng-container *ngIf="userList">
+  <table id="customers">
+    <tr>
+      <th>S.No</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Contact Number</th>
+      <th>Address</th>
+      <th colspan="2">Actions</th>
+    </tr>
+    <tr *ngFor="let user of userList; let i = index">
+      <td>{{i+1}}</td>
+      <td>{{user.name}}</td>
+      <td>{{user.email}}</td>
+      <td>{{user.contactnumber}}</td>
+      <td>{{user.address}}</td>
+      <td>
+        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#editUserModal" (click)="editUser(user)">
+          Edit
+        </button>
+      </td>
+      <td>
+        <button class="btn btn-danger" (click)="deleteUser(user.id)">Delete</button>
+      </td>
+    </tr>
+  </table>
+</ng-container>
+
+<!-- <ng-container *ngIf="!!userListFailRes">
+  <div >Something went wrong. Please try again later</div>
+</ng-container> -->
+
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <app-create-user></app-create-user>
+</div>
+
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <app-update-user [updatedUserDetail]="updatedUserDetail"></app-update-user>
+</div>

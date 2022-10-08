@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { map, catchError, exhaustMap, withLatestFrom } from 'rxjs/operators';
+import { Update } from '@ngrx/entity';
+import { map, catchError, exhaustMap, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { UserListService } from '../../service/user-list.service';
-import { LoadUserListAction, userListSuccess, userListFailure , loadUsers} from '../action/user-list.action';
-import { Store, select } from '@ngrx/store';
-import { isUserList } from '../selector/user-list.selector';
-import { UserListStateService } from '../state/user-list.state.service';
+import { LoadUserListAction, addUser, deleteUserSuccess, createUserSuccess, deleteUser, updateUser, updateUserSuccess, userListSuccess} from '../action/user-list.action';
+import { UserModal } from 'src/app/modals/user-list.modal';
 
 @Injectable({
   providedIn: 'root'
@@ -14,27 +13,71 @@ import { UserListStateService } from '../state/user-list.state.service';
 export class UserListEffect {
     constructor(
         private actions$: Actions,
-        private store: Store,
-        private userListService: UserListService,
-        private _userListStateService: UserListStateService
+        private userListService: UserListService
     ) { }
 
     userList$ = createEffect(() => {
         return this.actions$.pipe(
             ofType(LoadUserListAction),
-            withLatestFrom(this.store.pipe(select(isUserList))),
-            exhaustMap(([action, isUserList]) => {
+            exhaustMap((action) => {
                 const userId = action.userId;
-                 return isUserList[userId] ? [] : this.userListService.getUserList(userId)
+                 return this.userListService.getUserList(userId)
                  .pipe(
                     map((data) => {
-                        return loadUsers({users: data});
+                        return userListSuccess({users: data});
                     }),
-                    catchError(res => {
-                        this._userListStateService.dispatchLoader(false);
-                        const userFailRes = this.userListService.getFailureResponse(res.error, userId);
-                        alert(res.error.status)
-                        return of( userListFailure({userListFail: userFailRes}))
+                    // catchError(res => {
+                    //     const userFailRes = this.userListService.getFailureResponse(res.error, userId);
+                    //     alert(res.error.status)
+                    //     return of( userListFailure({userListFail: userFailRes}))
+                    // })
+                )
+            })
+        )
+    })
+
+    createUser$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(addUser),
+            exhaustMap(action => {
+                return this.userListService.addUser(action.userDetail)
+                .pipe(
+                    map( _ => {
+                        return createUserSuccess({userDetail: action.userDetail})
+                    })
+                )
+            })
+        )
+    })
+
+    editUser$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(updateUser),
+            exhaustMap(action => {
+                return this.userListService.updateUser(action.userDetail)
+                .pipe(
+                    map( _ => {
+                        const updatedData: Update<UserModal> = {
+                            id: action.userDetail.id,
+                            changes: {
+                                ...action.userDetail
+                            }
+                        };
+                        return updateUserSuccess({userDetail: updatedData})
+                    })
+                )
+            })
+        )
+    })
+
+    deleteUser$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(deleteUser),
+            switchMap(action => {
+                return this.userListService.deleteUser(action.userId)
+                .pipe(
+                    map( _ => {
+                        return deleteUserSuccess({userId: action.userId})
                     })
                 )
             })
