@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { getUser } from '../store/selector/user-list.selector';
 import { UserListStateService } from '../store/state/user-list.state.service';
 
 @Component({
@@ -11,7 +13,7 @@ export class UserListComponent implements OnInit {
   userListFailRes = false;
   showLoading: any;
 
-  constructor(private _userListStateService: UserListStateService) { }
+  constructor(private _userListStateService: UserListStateService, private store: Store) { }
 
   ngOnInit(): void {
     this.getSubscribeUserList(1637);
@@ -21,15 +23,15 @@ export class UserListComponent implements OnInit {
   getSubscribeUserList(userId: number) {
     this._userListStateService.dispatchLoader(true);
     this._userListStateService.dispatchUserList(userId);
-    this._userListStateService.getSelectedUserList$(userId)
-      .subscribe(res => {
-        !!res && this._userListStateService.dispatchLoader(false);
-        this.userList = res;
-      });
-    this._userListStateService.getSelectedUserListFail$(userId)
-      .subscribe(res => {
-        console.log('---------res', res);
-        this.userListFailRes = !!res;
-      })
+    this._userListStateService.getUserList$().subscribe(res=>{
+      this.userList = res;
+    })
+    // this._userListStateService.getSelectedUserList$(userId).subscribe(res => {
+    //   !!res && this._userListStateService.dispatchLoader(false);
+    //   this.userList = res;
+    // });
+    // this._userListStateService.getSelectedUserListFail$(userId).subscribe(res => {
+    //   this.userListFailRes = !!res;
+    // })
   }
 }

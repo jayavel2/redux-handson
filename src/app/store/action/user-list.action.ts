@@ -1,4 +1,6 @@
+import { Update } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
+import { UserModal } from 'src/app/modals/user-list.modal';
 import { User, UserFailureModal } from 'src/app/modals/user.modal';
 
 export const LoadUserList = '[UserList API] UserList API';
@@ -13,7 +15,7 @@ export const LoadUserListAction = createAction(
 
 export const userListSuccess = createAction(
     USER_LIST_SUCCESS,
-    props<{userList: User}>()
+    props<{users: UserModal[]}>()
 );
 
 export const userListFailure = createAction(
@@ -25,3 +27,5 @@ export const showLoader = createAction(
     LOADER_ACTION, 
     props<{status: boolean}>()
 )
+
+export const loadUsers = createAction('[User/API] Load Users', props<{ users: UserModal[] }>());

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { Store } from '@ngrx/store';
 import { LoadUserList, LOADER_ACTION } from '../action/user-list.action';
-import { getCacheData, getFailureUserRes, getLoading } from '../selector/user-list.selector';
+import { getCacheData, getFailureUserRes, getLoading, getUser } from '../selector/user-list.selector';
 
 @Injectable({
   providedIn: 'root'
@@ -30,5 +30,9 @@ export class UserListStateService {
 
   getLoader$(): Observable<any> {
     return this.store.select(getLoading);
+  }
+
+  getUserList$(): Observable<any> {
+    return this.store.select(getUser);
   }
 }

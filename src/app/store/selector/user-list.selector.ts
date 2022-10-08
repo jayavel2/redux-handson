@@ -1,9 +1,9 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { AppState } from '../state/app.index';
+import { adapter, AppState } from '../state/app.index';
  
 export const USER_LIST = 'userList'; // global node - reducer
 
-export const userList = createFeatureSelector<AppState>(USER_LIST);
+export const userList = createFeatureSelector<any>(USER_LIST);
 
 export interface State {
     [USER_LIST]: AppState;
@@ -31,3 +31,7 @@ export const getCacheData = (id: number) => createSelector(getUserList, isUserLi
 export const getFailureUserRes = (id: number) => createSelector(getUserListFailRes, (userList) => {
     return userList[id] ?? null;
 })
+
+export const userSelector = adapter.getSelectors();
+
+export const getUser = createSelector(userList, userSelector.selectAll)

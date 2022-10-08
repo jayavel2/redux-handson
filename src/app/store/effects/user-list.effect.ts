@@ -3,7 +3,7 @@ import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { map, catchError, exhaustMap, withLatestFrom } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { UserListService } from '../../service/user-list.service';
-import { LoadUserListAction, userListSuccess, userListFailure } from '../action/user-list.action';
+import { LoadUserListAction, userListSuccess, userListFailure , loadUsers} from '../action/user-list.action';
 import { Store, select } from '@ngrx/store';
 import { isUserList } from '../selector/user-list.selector';
 import { UserListStateService } from '../state/user-list.state.service';
@@ -28,8 +28,7 @@ export class UserListEffect {
                  return isUserList[userId] ? [] : this.userListService.getUserList(userId)
                  .pipe(
                     map((data) => {
-                        const userData = this.userListService.getFormatUserList(data, userId);
-                        return userListSuccess({userList: userData});
+                        return loadUsers({users: data});
                     }),
                     catchError(res => {
                         this._userListStateService.dispatchLoader(false);
