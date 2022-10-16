@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { Store } from '@ngrx/store';
-import { LoadUserList, CREATE_USER, DELETE_USER, UPDATE_USER } from '../action/user-list.action';
+import { LOAD_USER_LIST, CREATE_USER, DELETE_USER, UPDATE_USER, LOADER_ACTION } from '../action/user-list.action';
 import { getUser } from '../selector/user-list.selector';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class UserListStateService {
   constructor(private store: Store) { }
 
   readonly dispatchUserList = (id: number): void => {
-    this.store.dispatch({type: LoadUserList, userId: id});
+    this.store.dispatch({type: LOAD_USER_LIST, userId: id});
   }
 
   readonly dispatchCreateUser = (userDetail: any): void => {
@@ -26,6 +26,10 @@ export class UserListStateService {
 
   readonly dispatchDeleteUser = (id: number): void => {
     this.store.dispatch({type: DELETE_USER, userId: id});
+  }
+
+  readonly dispatchLoader = (status: boolean): void => {
+    this.store.dispatch({type: LOADER_ACTION, showLoader: status});
   }
 
   getUserList$(): Observable<any> {

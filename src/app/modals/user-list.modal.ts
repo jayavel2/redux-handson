@@ -3,9 +3,5 @@ export interface UserModal {
     name: string,
     email: string,
     contactnumber: number,
-    address: string;
-}
-
-export interface UserTestModal {
-    users: UserModal[];
+    address: string
 }

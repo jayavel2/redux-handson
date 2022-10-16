@@ -4,8 +4,21 @@ import { Update } from '@ngrx/entity';
 import { map, catchError, exhaustMap, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { UserListService } from '../../service/user-list.service';
-import { LoadUserListAction, addUser, deleteUserSuccess, createUserSuccess, deleteUser, updateUser, updateUserSuccess, userListSuccess} from '../action/user-list.action';
-import { UserModal } from 'src/app/modals/user-list.modal';
+import { UserModal } from '../../modals/user-list.modal';
+import {
+    createUser,
+    createUserSuccess,
+    createUserFailure,
+    updateUser,
+    updateUserSuccess,
+    updateUserFailure,
+    LoadUserListAction,
+    userListSuccess,
+    userListFailure,
+    deleteUser,
+    deleteUserSuccess,
+    deleteUserFailure  
+} from '../action/user-list.action';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +39,10 @@ export class UserListEffect {
                     map((data) => {
                         return userListSuccess({users: data});
                     }),
-                    // catchError(res => {
-                    //     const userFailRes = this.userListService.getFailureResponse(res.error, userId);
-                    //     alert(res.error.status)
-                    //     return of( userListFailure({userListFail: userFailRes}))
-                    // })
+                    catchError(res => {
+                        alert('Something went wrong')
+                        return of( userListFailure())
+                    })
                 )
             })
         )
@@ -38,12 +50,16 @@ export class UserListEffect {
 
     createUser$ = createEffect(() => {
         return this.actions$.pipe(
-            ofType(addUser),
+            ofType(createUser),
             exhaustMap(action => {
                 return this.userListService.addUser(action.userDetail)
                 .pipe(
                     map( _ => {
                         return createUserSuccess({userDetail: action.userDetail})
+                    }),
+                    catchError(res=> {
+                        alert('Unable to create user');
+                        return of(createUserFailure())
                     })
                 )
             })
@@ -64,6 +80,10 @@ export class UserListEffect {
                             }
                         };
                         return updateUserSuccess({userDetail: updatedData})
+                    }),
+                    catchError(res=> {
+                        alert('Unable to create user');
+                        return of(updateUserFailure())
                     })
                 )
             })
@@ -78,6 +98,10 @@ export class UserListEffect {
                 .pipe(
                     map( _ => {
                         return deleteUserSuccess({userId: action.userId})
+                    }),
+                    catchError(res=> {
+                        alert('Unable to create user');
+                        return of(deleteUserFailure())
                     })
                 )
             })
